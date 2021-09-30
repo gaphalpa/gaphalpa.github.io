@@ -5,10 +5,9 @@ SELECT
 	DATENAME(dw,started_at) AS day_of_week, -- Returns the day when the trip occurred
 	Geography::Point(start_lat,start_lng,4326).STDistance(Geography::Point(end_lat,end_lng,4326)) AS trip_distance -- Returns the distance traveled
 INTO
-	divvy_trip_data -- Compiled and cleaned table for analysis
+	divvy_trip_data
 FROM
 (
-	-- All trip data csv files are compiled using UNION and CAST according to their appropriate data types
 	SELECT
 		CAST(ride_id AS VARCHAR(16)) AS ride_id, 
 		CAST(rideable_type AS CHAR(13)) AS rideable_type,
@@ -207,3 +206,15 @@ WHERE
 	AND start_station_name <> end_station_name -- This excludes trips that have the same starting and ending location
 	AND DATEDIFF(MINUTE,started_at,ended_at) > 0 -- This excludes trips that have a starting time that is later than the ending time
 	AND DATEDIFF(MINUTE,started_at,ended_at) < 60 * 24 -- This excludes trips that lasted for more than 24 hours
+
+-- This query selects relevant columns to be used for visualization
+SELECT
+	member_casual AS rider_type,
+	started_at AS start_time,
+	ended_at AS end_time,
+	start_station_name AS start_station,
+	end_station_name AS end_station,
+	trip_length,
+	day_of_week,
+	ROUND(trip_distance,0) AS trip_distance -- The ROUND function is used to improve readability in visualization
+FROM divvy_trip_data;

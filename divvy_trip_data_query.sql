@@ -31,31 +31,31 @@ WHERE started_at = '0000-00-00 00:00:00' OR ended_at = '0000-00-00 00:00:00';
 -- Remove rows that were company test rides; 160 rows removed
 DELETE FROM a
 WHERE
-	start_station_name LIKE '%test%'
+    start_station_name LIKE '%test%'
     OR end_station_name LIKE '%test%';
 
 -- Remove other company-related trips. 8 rows removed
 DELETE FROM a
 WHERE
-	start_station_name LIKE '%divvy%'
+    start_station_name LIKE '%divvy%'
     OR end_station_name LIKE '%divvy%';
 
 -- Modify station names with unnecessary strings in parentheses; 128,083 rows affected
 UPDATE a
 SET
-	start_station_name = REGEXP_REPLACE(start_station_name, '\\(\\w{2,}(\\s\\w{2,})*\\)', ''),
+    start_station_name = REGEXP_REPLACE(start_station_name, '\\(\\w{2,}(\\s\\w{2,})*\\)', ''),
     end_station_name = REGEXP_REPLACE(end_station_name, '\\(\\w{2,}(\\s\\w{2,})*\\)', '')
 WHERE
-	start_station_name LIKE '%(%)%'
-	OR end_station_name LIKE '%(%)%';
+    start_station_name LIKE '%(%)%'
+    OR end_station_name LIKE '%(%)%';
     
 -- Modify station names containing "DuSable "; 80,246 rows affected
 UPDATE a
 SET
-	start_station_name = REPLACE(start_station_name, 'DuSable ', ''),
+    start_station_name = REPLACE(start_station_name, 'DuSable ', ''),
     end_station_name = REPLACE(end_station_name, 'DuSable ', '')
 WHERE
-	start_station_name LIKE 'DuSable Lake%'
+    start_station_name LIKE 'DuSable Lake%'
     OR end_station_name LIKE 'DuSable Lake%';
 
 -- Remove nulls values; 1 row removed
@@ -65,7 +65,7 @@ WHERE started_at IS NULL;
 -- Remove rows with no station inputs; 644,185 rows removed
 DELETE FROM a
 WHERE
-	start_station_name = ''
+    start_station_name = ''
     OR end_station_name = '';
 
 -- --------------------- --
@@ -79,10 +79,10 @@ AS
 (
 CASE
 	WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '05:00:00' AND '11:59:59' THEN 'Morning'
-    WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '12:00:00' AND '16:59:59' THEN 'Afternoon'
-    WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '17:00:00' AND '19:59:59' THEN 'Evening'
-    WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '20:00:00' AND '04:59:59' THEN 'Night'
-    ELSE 'Night'
+        WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '12:00:00' AND '16:59:59' THEN 'Afternoon'
+        WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '17:00:00' AND '19:59:59' THEN 'Evening'
+        WHEN DATE_FORMAT(a.started_at, '%H:%i:%s') BETWEEN '20:00:00' AND '04:59:59' THEN 'Night'
+        ELSE 'Night'
 END
 );
 
@@ -97,7 +97,7 @@ ADD COLUMN season CHAR(6)
 AS
 (
 CASE
-	WHEN a.started_at BETWEEN '2020-09-01 00:00:00' AND '2020-12-20 23:59:59' THEN 'Autumn'
+    WHEN a.started_at BETWEEN '2020-09-01 00:00:00' AND '2020-12-20 23:59:59' THEN 'Autumn'
     WHEN a.started_at BETWEEN '2020-12-21 00:00:00' AND '2021-03-19 23:59:59' THEN 'Winter'
     WHEN a.started_at BETWEEN '2021-03-20 00:00:00' AND '2021-06-19 23:59:59' THEN 'Spring'
     WHEN a.started_at BETWEEN '2021-06-20 00:00:00' AND '2021-09-21 23:59:59' THEN 'Summer'
@@ -109,7 +109,7 @@ END
 DROP TABLE IF EXISTS divvy;
 CREATE TABLE divvy
 SELECT
-	'user_type',
+    'user_type',
     'start_time',
     'end_time',
     'time_period',
@@ -122,9 +122,9 @@ SELECT
     'end_station',
     'end_latitude',
     'end_longitude'
-    UNION ALL
+UNION ALL
 SELECT
-	member_casual user_type,
+    member_casual user_type,
     started_at start_time,
     ended_at end_time,
     time_period,
